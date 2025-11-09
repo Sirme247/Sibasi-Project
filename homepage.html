@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #605DFF;
+            --black: --black;
+            --primary-hover: #5568d3;
+            --success: #4CAF50;
+            --success-hover: #45a049;
+            --danger: #f44336;
+            --danger-hover: #da190b;
+            --info: #2196F3;
+            --info-hover: #0b7dda;
+            --gray: #9e9e9e;
+            --gray-hover: #757575;
+            --text: #333;
+            --bg-light: #f8f9fa;
+            --bg-hover: #e9ecef;
+            --border: #e0e0e0;
+            --muted: #999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .listPage {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .listCard {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: var(--black);
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        #taskInput {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        #taskInput:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        #addBtn {
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #addBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(96, 93, 255, 0.4);
+        }
+
+        #addBtn:active {
+            transform: translateY(0);
+        }
+
+        .task-list {
+            list-style: none;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            background-color: var(--bg-light);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .task-item:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text);
+            word-break: break-word;
+        }
+
+        .task-text.editing {
+            display: none;
+        }
+
+        .task-input {
+            flex: 1;
+            padding: 8px 10px;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            display: none;
+        }
+
+        .task-input.editing {
+            display: block;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn, .delete-btn, .save-btn, .cancel-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .edit-btn {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: var(--success-hover);
+        }
+
+        .delete-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .save-btn {
+            background-color: var(--info);
+            color: white;
+        }
+
+        .save-btn:hover {
+            background-color: var(--info-hover);
+        }
+
+        .cancel-btn {
+            background-color: var(--gray);
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background-color: var(--gray-hover);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .task-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .task-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .task-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .task-list::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-hover);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="listPage">
+        <div class="listCard">
+            <h1>ToDo List</h1>
+            <div class="input-section">
+                <input type="text" id="taskInput" placeholder="Add a new task...">
+                <button id="addBtn">Add</button>
+            </div>
+            <ul class="task-list" id="taskList">
+                <div class="empty-state">No tasks yet!</div>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const taskInput = document.getElementById('taskInput');
+        const addBtn = document.getElementById('addBtn');
+        const taskList = document.getElementById('taskList');
+        let tasks = [];
+        let taskIdCounter = 0;
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            
+            if (tasks.length === 0) {
+                taskList.innerHTML = '<div class="empty-state">No tasks yet!</div>';
+                return;
+            }
+
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item';
+                li.innerHTML = `
+                    <span class="task-text" id="text-${task.id}">${task.text}</span>
+                    <input type="text" class="task-input" id="input-${task.id}" value="${task.text}">
+                    <div class="task-actions">
+                        <button class="edit-btn" onclick="editTask(${task.id})">Update</button>
+                        <button class="save-btn hidden" onclick="saveTask(${task.id})">Save</button>
+                        <button class="cancel-btn hidden" onclick="cancelEdit(${task.id})">Cancel</button>
+                        <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+                    </div>
+                `;
+                taskList.appendChild(li);
+            });
+        }
+
+        function addTask() {
+            const text = taskInput.value.trim();
+            if (text === '') {
+                return;
+            }
+
+            tasks.push({
+                id: taskIdCounter++,
+                text: text
+            });
+
+            taskInput.value = '';
+            renderTasks();
+        }
+
+        function editTask(id) {
+            const textEl = document.getElementById(`text-${id}`);
+            const inputEl = document.getElementById(`input-${id}`);
+            const taskItem = textEl.closest('.task-item');
+            const editBtn = taskItem.querySelector('.edit-btn');
+            const deleteBtn = taskItem.querySelector('.delete-btn');
+            const saveBtn = taskItem.querySelector('.save-btn');
+            const cancelBtn = taskItem.querySelector('.cancel-btn');
+
+            textEl.classList.add('editing');
+            inputEl.classList.add('editing');
+            editBtn.classList.add('hidden');
+            deleteBtn.classList.add('hidden');
+            saveBtn.classList.remove('hidden');
+            cancelBtn.classList.remove('hidden');
+            inputEl.focus();
+        }
+
+        function saveTask(id) {
+            const inputEl = document.getElementById(`input-${id}`);
+            const newText = inputEl.value.trim();
+
+            if (newText === '') {
+                alert('Task cannot be empty!');
+                return;
+            }
+
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.text = newText;
+            }
+
+            renderTasks();
+        }
+
+        function cancelEdit(id) {
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            renderTasks();
+        }
+
+        addBtn.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        renderTasks();
+    </script>
+</body>
+
+</html>
